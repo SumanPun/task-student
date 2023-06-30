@@ -1,10 +1,10 @@
-username: admin
-password: admin
+username: John
+password: john123
 
 registerStudent:
 url(http://localhost:9090/api/v1/student/)
 json:{
-	"id":1,
+    "id":1,
     "name":"Peter",
     "email":"peter123@gmail.com",
     "semester":"4th",

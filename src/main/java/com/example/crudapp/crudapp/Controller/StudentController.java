@@ -25,7 +25,7 @@ public class StudentController {
 	@Autowired
 	private StudentService studentService;
 	
-	@PostMapping("/admin/")
+	@PostMapping("/")
 	public ResponseEntity<StudentDto> registerStudent(@RequestBody StudentDto studentDto) {
 		
 		StudentDto registerStudent = this.studentService.createStudent(studentDto);

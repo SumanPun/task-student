@@ -5,10 +5,11 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.example.crudapp.crudapp.Entity.Student;
+import com.example.crudapp.crudapp.Entity.Role;
 
 @Repository
-public interface StudentRepository extends JpaRepository<Student, Integer>{
+public interface RoleRepository extends JpaRepository<Role, Integer>{
 	
-	Optional<Student> findByName(String username);
+	//Optional<Role> findByName(String name);
+	
 }

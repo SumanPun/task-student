@@ -1,6 +1,5 @@
 package com.example.crudapp.crudapp.Payloads;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import lombok.AllArgsConstructor;
@@ -17,6 +16,7 @@ public class StudentDto {
 	private int Id;
 	private String name;
 	private String email;
+	private String password;
 	private String semester;
 	private String address;
 	private Boolean active;

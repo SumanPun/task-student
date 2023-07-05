@@ -3,15 +3,21 @@ package com.example.crudapp.crudapp.Security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
+@EnableGlobalMethodSecurity(
+		  prePostEnabled = true)
 public class SecurityConfig {
 
 
+	private static final String[] WHITELIST_PATTERNS= { "/api/v1/student/register", "/auth/login" };
+	
     @Autowired
     private JwtAuthenticationEntryPoint point;
     @Autowired
@@ -23,8 +29,7 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(
         			auth-> 
-        			auth.requestMatchers("/api/v1/student/**").authenticated()
-        			.requestMatchers("/auth/login").permitAll()
+        			auth.requestMatchers(WHITELIST_PATTERNS).permitAll()
         			.anyRequest().authenticated()
         		)        
         .exceptionHandling(ex -> ex.authenticationEntryPoint(point))

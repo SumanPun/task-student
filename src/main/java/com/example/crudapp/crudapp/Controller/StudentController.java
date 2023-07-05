@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,7 +26,7 @@ public class StudentController {
 	@Autowired
 	private StudentService studentService;
 	
-	@PostMapping("/")
+	@PostMapping("/register")
 	public ResponseEntity<StudentDto> registerStudent(@RequestBody StudentDto studentDto) {
 		
 		StudentDto registerStudent = this.studentService.createStudent(studentDto);
@@ -47,6 +48,7 @@ public class StudentController {
 	}
 	
 	@PutMapping("/{id}")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<StudentDto> updateStudent(@PathVariable ("id") int studentId, @RequestBody StudentDto studentDto) {
 		
 		StudentDto studentUpdated = this.studentService.updateStudent(studentId, studentDto);
@@ -55,6 +57,7 @@ public class StudentController {
 	}
 	
 	@DeleteMapping("/{id}")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<ApiResponse> deleteStudent(@PathVariable ("id") int studentId) {
 		
 		ApiResponse deletedStudent = this.studentService.deleteStudent(studentId);

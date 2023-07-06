@@ -33,6 +33,8 @@ public class Student implements UserDetails{
 	private String email;
 	private String password;
 	private String semester;
+
+	private String imageName;
 	private String address;
 	private Boolean active;
 	@Column(name = "created_at")

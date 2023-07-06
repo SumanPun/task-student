@@ -19,6 +19,8 @@ public class StudentDto {
 	private String password;
 	private String semester;
 	private String address;
+
+	private String imageName;
 	private Boolean active;
 	private Date addedDate;
 

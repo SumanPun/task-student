@@ -110,4 +110,10 @@ public class StudentService {
 		return student;
 	}
 	
+	public List<Student> getStudentList() {
+		
+		List<Student> students = this.studentRepository.findAll();
+		return students;
+	}
+	
 }

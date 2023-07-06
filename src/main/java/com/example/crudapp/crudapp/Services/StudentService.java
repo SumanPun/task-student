@@ -1,12 +1,11 @@
 package com.example.crudapp.crudapp.Services;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,8 +18,9 @@ import com.example.crudapp.crudapp.Repository.RoleRepository;
 import com.example.crudapp.crudapp.Repository.StudentRepository;
 
 @Service
+@Slf4j
 public class StudentService {
-	
+
 	@Autowired
 	private StudentRepository studentRepository;
 	
@@ -31,9 +31,11 @@ public class StudentService {
 	private RoleRepository roleRepository;
 	
 	public StudentDto createStudent(StudentDto studentDto) {
-		
+
+
 		Student student = this.dtoToStudent(studentDto);
 		student.setActive(true);
+		student.setImageName("Default.png");
 		student.setAddedDate(new Date());
 		student.setPassword(passwordEncoder.encode(studentDto.getPassword()));
 		
@@ -53,7 +55,7 @@ public class StudentService {
 	}
 	
 	public List<StudentDto> getAllStudents() {
-		
+		log.info("Fetching student's all data");
 		List<Student> listStudents = this.studentRepository.findAll();
 		List<StudentDto> listStudentDtos = listStudents.stream().map((student) -> this.studentToDto(student)).collect(Collectors.toList());
 		
@@ -68,6 +70,7 @@ public class StudentService {
 		student.setPassword(studentDto.getPassword());
 		student.setAddress(studentDto.getAddress());
 		student.setSemester(studentDto.getSemester());
+		student.setImageName(studentDto.getImageName());
 		
 		student.setAddedDate(new Date());
 		this.studentRepository.save(student);
@@ -92,6 +95,7 @@ public class StudentService {
 		studentDto.setPassword(student.getPassword());
 		studentDto.setSemester(student.getSemester());
 		studentDto.setAddress(student.getAddress());
+		studentDto.setImageName(student.getImageName());
 		studentDto.setActive(student.getActive());
 		studentDto.setAddedDate(student.getAddedDate());
 		return studentDto;
@@ -105,6 +109,7 @@ public class StudentService {
 		student.setPassword(studentDto.getPassword());
 		student.setSemester(studentDto.getSemester());
 		student.setAddress(studentDto.getAddress());
+		student.setImageName(studentDto.getImageName());
 		student.setActive(studentDto.getActive());
 		student.setAddedDate(studentDto.getAddedDate());
 		return student;

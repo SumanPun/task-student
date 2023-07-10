@@ -28,14 +28,21 @@ public class Student implements UserDetails{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+//	@CsvBindByName
 	private int Id;
+
 	private String name;
+
 	private String email;
+
 	private String password;
+
 	private String semester;
 
 	private String imageName;
+
 	private String address;
+
 	private Boolean active;
 	@Column(name = "created_at")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = ("yyyy-MM-dd'T'HH:mm:ss.SSSSSS"))

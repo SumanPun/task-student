@@ -16,7 +16,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
 
-	private static final String[] WHITELIST_PATTERNS= { "/api/v1/student/register", "/auth/login", "/api/v1/students/export-to-pdf", "/api/v1/students/export-to-csv/" };
+	private static final String[] WHITELIST_PATTERNS= {
+            "/api/v1/student/register", "/auth/login",
+            "/api/v1/students/export-to-pdf", "/api/v1/students/export-to-csv/"
+    };
 	
     @Autowired
     private JwtAuthenticationEntryPoint point;

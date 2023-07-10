@@ -33,8 +33,8 @@ public class StudentController {
 		return new ResponseEntity<>(registerStudent, HttpStatus.CREATED);
 	}
 	
-	@GetMapping("/{id}")
-	public ResponseEntity<StudentDto> getStudentById(@PathVariable ("id") int student_Id) {
+	@GetMapping(value = "/{student_id}")
+	public ResponseEntity<StudentDto> getStudentById(@PathVariable ("student_id") int student_Id) {
 		
 		StudentDto studentDto = this.studentService.getStudentById(student_Id);
 		return new ResponseEntity<>(studentDto, HttpStatus.OK);

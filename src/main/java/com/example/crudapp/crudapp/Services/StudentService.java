@@ -4,7 +4,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Filter;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,7 +22,7 @@ import com.example.crudapp.crudapp.Repository.StudentRepository;
 
 @Service
 @Slf4j
-public class StudentService {
+public class StudentService implements StudentServiceInterface<StudentDto> {
 
 	@Autowired
 	private StudentRepository studentRepository;
@@ -29,7 +32,11 @@ public class StudentService {
 	
 	@Autowired
 	private RoleRepository roleRepository;
-	
+
+	@Autowired
+	private EntityManager entityManager;
+
+	@Override
 	public StudentDto createStudent(StudentDto studentDto) {
 
 
@@ -47,13 +54,15 @@ public class StudentService {
 		return this.studentToDto(saveStudent);
 		
 	}
-	
+
+	@Override
 	public StudentDto getStudentById(int studentId) {
 		
 		Student student = this.studentRepository.findById(studentId).orElseThrow(()-> new ResourceNotFoundException("student", "studentId", studentId));
 		return this.studentToDto(student);
 	}
-	
+
+	@Override
 	public List<StudentDto> getAllStudents() {
 		log.info("Fetching student's all data");
 		List<Student> listStudents = this.studentRepository.findAll();
@@ -61,7 +70,8 @@ public class StudentService {
 		
 		return listStudentDtos;
 	}
-	
+
+	@Override
 	public StudentDto updateStudent(int studentId, StudentDto studentDto) {
 		
 		Student student = this.studentRepository.findById(studentId).orElseThrow(()->new ResourceNotFoundException("student", "studentId", studentId));
@@ -78,7 +88,7 @@ public class StudentService {
 		return this.studentToDto(student);
 	}
 
-	
+	@Override
 	public ApiResponse deleteStudent(int studentId) {
 		
 		Student student = this.studentRepository.findById(studentId).orElseThrow(()-> new ResourceNotFoundException("student", "studentId", studentId));
@@ -86,7 +96,18 @@ public class StudentService {
 		
 		return new ApiResponse("successfully deleted",true);
 	}
-	
+
+	@Override
+	public List<StudentDto> findAll(boolean isDeleted) {
+		Session session = entityManager.unwrap(Session.class);
+		Filter filter = session.enableFilter("deletedStudentFilter");
+		filter.setParameter("isDeleted", isDeleted);
+		List<Student> students = studentRepository.findAll();
+		session.disableFilter("deletedStudentFilter");
+		List<StudentDto> studentDtos = students.stream().map((s)-> this.studentToDto(s)).collect(Collectors.toList());
+		return  studentDtos;
+	}
+
 	public StudentDto studentToDto(Student student) {
 		StudentDto studentDto = new StudentDto();
 		studentDto.setId(student.getId());
@@ -114,7 +135,7 @@ public class StudentService {
 		student.setAddedDate(studentDto.getAddedDate());
 		return student;
 	}
-	
+
 	public List<Student> getStudentList() {
 		
 		List<Student> students = this.studentRepository.findAll();

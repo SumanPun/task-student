@@ -8,6 +8,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.ParamDef;
+import org.hibernate.annotations.SQLDelete;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,6 +28,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @Table(name = "student")
+@SQLDelete(sql = "UPDATE student SET deleted = true WHERE id=?")
+@FilterDef(name = "deletedStudentFilter", parameters = @ParamDef(name = "isDeleted", type = Boolean.class))
+@Filter(name = "deletedStudentFilter", condition = "deleted = :isDeleted")
 public class Student implements UserDetails{
 	
 	@Id
@@ -44,6 +51,7 @@ public class Student implements UserDetails{
 	private String address;
 
 	private Boolean active;
+	private boolean deleted = Boolean.FALSE;
 	@Column(name = "created_at")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = ("yyyy-MM-dd'T'HH:mm:ss.SSSSSS"))
 	private Date addedDate;

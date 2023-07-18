@@ -33,7 +33,7 @@ public class SecurityConfig {
         .authorizeHttpRequests(
         			auth-> 
         			auth.requestMatchers(WHITELIST_PATTERNS).permitAll()
-        			.anyRequest().permitAll() //authenticated()
+        			.anyRequest().authenticated()
         		)        
         .exceptionHandling(ex -> ex.authenticationEntryPoint(point))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

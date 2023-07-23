@@ -79,9 +79,9 @@ public class PdfGenerator {
 
 		document.add(space);
 
-		PdfPTable table = new PdfPTable(8);
+		PdfPTable table = new PdfPTable(9);
 		table.setWidthPercentage(100f);
-		table.setWidths(new int[] {3,3,3,3,3,3,3,3});
+		table.setWidths(new int[] {3,3,3,3,3,3,3,3,3});
 		table.setSpacingBefore(5);
 		table.setSpacingAfter(30);
 		table.getDefaultCell().setBorder(0);
@@ -104,6 +104,8 @@ public class PdfGenerator {
 	    table.addCell(cell);
 	    cell.setPhrase(new Phrase("Semester", font));
 	    table.addCell(cell);
+		cell.setPhrase(new Phrase("birthDay", font));
+		table.addCell(cell);
 	    cell.setPhrase(new Phrase("Address", font));
 	    table.addCell(cell);
 		cell.setPhrase(new Phrase("imgName", font));
@@ -122,6 +124,7 @@ public class PdfGenerator {
 	      table.addCell(student.getEmail());
 	      // Adding student mobile
 	      table.addCell(student.getSemester());
+		  table.addCell(student.getDob());
 	      table.addCell(student.getAddress());
 		  table.addCell(student.getImageName());
 	      table.addCell(student.getActive().toString());

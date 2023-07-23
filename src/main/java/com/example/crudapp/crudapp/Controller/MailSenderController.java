@@ -23,9 +23,15 @@ public class MailSenderController {
    @PostMapping("/send-mail")
    public ResponseEntity<String> sendMail(@RequestBody EmailRequestDto emailRequest) {
 
+       String logoURL = "https://ausnepit.com.au/wp-content/uploads/2021/09/ausnepwhite.png";
+       String pdfAttach = "https://drive.google.com/file/d/1kq2TZCBtB0yZodubpsnxE_Ayl0nGo7cm/view?usp=drive_link";
+
        Map<String, String > model = new HashMap<>();
        model.put("name", emailRequest.getName());
-       model.put("value", "Welcome to John Doe Mail");
+       model.put("logoURL", logoURL);
+       model.put("message", emailRequest.getMessage());
+       model.put("from", emailRequest.getFrom());
+       model.put("attachPdf",pdfAttach);
        String response = mailService.sendMail(emailRequest, model);
        return new ResponseEntity<>(response, HttpStatus.OK);
 

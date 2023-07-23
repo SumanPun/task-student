@@ -6,6 +6,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.example.crudapp.crudapp.Payloads.ApiResponse;
+import org.springframework.web.context.request.WebRequest;
+
+import java.util.Date;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -15,6 +18,12 @@ public class GlobalExceptionHandler {
 		String message = exception.getMessage();
 		ApiResponse apiResponse = new ApiResponse(message, false);
 		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+	}
+
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<?> globleExceptionHandler(Exception ex, WebRequest request) {
+		ErrorResponse errorDetails = new ErrorResponse(new Date(), HttpStatus.INTERNAL_SERVER_ERROR.toString(), ex.getMessage(), request.getDescription(false));
+		return ResponseHandler.response(HttpStatus.BAD_REQUEST, false, errorDetails);
 	}
 
 }

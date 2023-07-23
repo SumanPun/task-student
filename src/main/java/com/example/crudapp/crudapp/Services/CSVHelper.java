@@ -64,6 +64,7 @@ public class CSVHelper {
                         csvRecord.get("email"),
                         csvRecord.get("password"),
                         csvRecord.get("semester"),
+                        csvRecord.get("birthDay"),
                         csvRecord.get("address"),
                         csvRecord.get("imageName"),
                         Boolean.parseBoolean(csvRecord.get("active")),

@@ -4,11 +4,16 @@
     <title>Spring boot send mail example</title>
 </head>
 <body>
-<h2>Sending mail from Spring boot!!</h2>
-<h3>Hi ${name}!!</h3>
-<p>${value}</p>
+
 <div>
-    <P>John Doe mail</P>
+    <img src="${logoURL}" alt="Logo" height="50">
+
+    <p>Hello ${name},</p>
+
+    <p>${message}</p>
+    <p>Find attached the PDF document: <a href="${attachPdf}">Download PDF</a></p>
+    <p>Best regards,</p>
+    <p>${from}</p>
 </div>
 </body>
 </html>

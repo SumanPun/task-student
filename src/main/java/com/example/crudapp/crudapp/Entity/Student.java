@@ -37,21 +37,19 @@ public class Student implements UserDetails{
 	@GeneratedValue(strategy = GenerationType.AUTO)
 //	@CsvBindByName
 	private int Id;
-
 	private String name;
-
 	private String email;
-
 	private String password;
-
 	private String semester;
-
 	private String imageName;
-
+	private String dob;
 	private String address;
-
 	private Boolean active;
 	private boolean deleted = Boolean.FALSE;
+
+	@OneToOne
+	@JoinColumn(name = "subscriptionId", referencedColumnName = "id")
+	private Subscription subscription;
 	@Column(name = "created_at")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = ("yyyy-MM-dd'T'HH:mm:ss.SSSSSS"))
 	private Date addedDate;

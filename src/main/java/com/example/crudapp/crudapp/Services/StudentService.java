@@ -1,5 +1,8 @@
 package com.example.crudapp.crudapp.Services;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,14 +41,11 @@ public class StudentService implements StudentServiceInterface<StudentDto> {
 
 	@Override
 	public StudentDto createStudent(StudentDto studentDto) {
-
-
 		Student student = this.dtoToStudent(studentDto);
 		student.setActive(true);
 		student.setImageName("Default.png");
 		student.setAddedDate(new Date());
 		student.setPassword(passwordEncoder.encode(studentDto.getPassword()));
-		
 		Role role = this.roleRepository.findById(2).get();
 		student.getRoles().add(role);
 		
@@ -81,6 +81,7 @@ public class StudentService implements StudentServiceInterface<StudentDto> {
 		student.setAddress(studentDto.getAddress());
 		student.setSemester(studentDto.getSemester());
 		student.setImageName(studentDto.getImageName());
+		student.setDob(studentDto.getDob());
 		
 		student.setAddedDate(new Date());
 		this.studentRepository.save(student);
@@ -118,6 +119,8 @@ public class StudentService implements StudentServiceInterface<StudentDto> {
 		studentDto.setAddress(student.getAddress());
 		studentDto.setImageName(student.getImageName());
 		studentDto.setActive(student.getActive());
+		studentDto.setDob(student.getDob());
+		studentDto.setAddedDate(student.getAddedDate());
 		studentDto.setAddedDate(student.getAddedDate());
 		return studentDto;
 	}
@@ -131,6 +134,7 @@ public class StudentService implements StudentServiceInterface<StudentDto> {
 		student.setSemester(studentDto.getSemester());
 		student.setAddress(studentDto.getAddress());
 		student.setImageName(studentDto.getImageName());
+		student.setDob(studentDto.getDob());
 		student.setActive(studentDto.getActive());
 		student.setAddedDate(studentDto.getAddedDate());
 		return student;

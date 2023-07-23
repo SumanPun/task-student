@@ -34,10 +34,10 @@ public class CsvGenerator {
 
         try {
             CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT);
-            csvPrinter.printRecord("Id","name","email","password","semester","address", "imageName","active","addedDate");
+            csvPrinter.printRecord("Id","name","email","password","semester","dob","address", "imageName","active","addedDate");
             for(Student student : students) {
                 csvPrinter.printRecord(student.getId(), student.getName(), student.getEmail(),student.getPassword(),
-                        student.getSemester(), student.getAddress(),  student.getImageName(), student.getActive(), student.getAddedDate());
+                        student.getSemester(),student.getDob(), student.getAddress(),  student.getImageName(), student.getActive(), student.getAddedDate());
             }
         } catch (IOException ex) {
             log.error("Error While Writing CSV" + ex);

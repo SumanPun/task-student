@@ -18,6 +18,7 @@ public class StudentDto {
 	private String email;
 	private String password;
 	private String semester;
+	private String dob;
 	private String address;
 
 	private String imageName;

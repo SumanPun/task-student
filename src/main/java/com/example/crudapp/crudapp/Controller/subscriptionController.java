@@ -12,13 +12,25 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/subscription")
 public class subscriptionController {
 
-    @Autowired
-    private SubscriptionService subscriptionService;
+    private final SubscriptionService subscriptionService;
 
-    @GetMapping ("/{studentId}/SubscriptionPlan/{subscriptionPlanId}")
-    public ResponseEntity<ApiResponse> addSubscription(@PathVariable(name = "studentId") Integer studentId, @PathVariable(name = "subscriptionPlanId") Integer subscriptionPlanId) {
+    public subscriptionController(SubscriptionService subscriptionService) {
+        this.subscriptionService = subscriptionService;
+    }
 
-        ApiResponse response = this.subscriptionService.addSubscription(studentId,subscriptionPlanId);
+    @GetMapping ("/{studentId}/SubscriptionPlan/premium/{subscriptionPlanId}")
+    public ResponseEntity<ApiResponse> addPremiumsubscription(@PathVariable(name = "studentId") Integer studentId, @PathVariable(name = "subscriptionPlanId") Integer subscriptionPlanId) {
+
+        ApiResponse response = this.subscriptionService.addPremiumSubscription(studentId,subscriptionPlanId);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+
+    }
+
+    @GetMapping ("/{studentId}/SubscriptionPlan/free")
+    public ResponseEntity<ApiResponse> addFreeSubscription(@PathVariable(name = "studentId") Integer studentId) {
+
+        ApiResponse response = this.subscriptionService.takeFreeSubscription(studentId);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
 

@@ -12,9 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/promoCode")
-@EnableGlobalMethodSecurity (
-        prePostEnabled = true
-)
 public class PromoCodeController {
 
     @Autowired

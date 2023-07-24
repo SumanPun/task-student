@@ -35,6 +35,7 @@ public class StudentController {
 	}
 	
 	@GetMapping("/")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<List<StudentDto>> getAllStudent() {
 		
 		List<StudentDto> studentDtos = this.studentService.getAllStudents();
@@ -42,7 +43,6 @@ public class StudentController {
 	}
 	
 	@PutMapping("/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<StudentDto> updateStudent(@PathVariable ("id") int studentId, @RequestBody StudentDto studentDto) {
 		
 		StudentDto studentUpdated = this.studentService.updateStudent(studentId, studentDto);

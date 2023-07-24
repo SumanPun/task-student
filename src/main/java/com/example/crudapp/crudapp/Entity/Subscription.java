@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -21,8 +22,8 @@ public class Subscription {
     private int id;
     private boolean freeTrial;
     private boolean subscribed;
-    private Date startDate;
-    private Date endDate;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
     @OneToOne
     @JoinColumn(name = "studentId",referencedColumnName = "id")
     private Student student;

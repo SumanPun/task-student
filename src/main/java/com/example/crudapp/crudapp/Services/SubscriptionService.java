@@ -4,27 +4,49 @@ import com.example.crudapp.crudapp.Entity.Student;
 import com.example.crudapp.crudapp.Entity.Subscription;
 import com.example.crudapp.crudapp.Entity.SubscriptionPlan;
 import com.example.crudapp.crudapp.Exceptions.ResourceNotFoundException;
-import com.example.crudapp.crudapp.Exceptions.SubscriptionException;
 import com.example.crudapp.crudapp.Payloads.ApiResponse;
 import com.example.crudapp.crudapp.Repository.StudentRepository;
 import com.example.crudapp.crudapp.Repository.SubscriptionPlanRepository;
 import com.example.crudapp.crudapp.Repository.SubscriptionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.Optional;
+import java.time.LocalDateTime;
 
 @Service
 public class SubscriptionService {
 
-    @Autowired
-    private SubscriptionRepository subscriptionRepository;
-    @Autowired
-    private SubscriptionPlanRepository subscriptionPlanRepository;
-    @Autowired
-    private StudentRepository studentRepository;
-    public ApiResponse addSubscription(Integer studentId, Integer subscriptionPlanId) {
+    private final SubscriptionRepository subscriptionRepository;
+    private final SubscriptionPlanRepository subscriptionPlanRepository;
+    private final StudentRepository studentRepository;
+
+    public SubscriptionService(SubscriptionRepository subscriptionRepository, StudentRepository studentRepository, SubscriptionPlanRepository subscriptionPlanRepository) {
+        this.subscriptionRepository = subscriptionRepository;
+        this.studentRepository = studentRepository;
+        this.subscriptionPlanRepository = subscriptionPlanRepository;
+    }
+
+    public ApiResponse takeFreeSubscription(Integer studentId) {
+        Student student = this.studentRepository.findById(studentId).orElseThrow(()-> new ResourceNotFoundException("user","userId",studentId));
+        Subscription freeSubscription = student.getSubscription();
+        if(freeSubscription == null) {
+            Subscription subscription = new Subscription();
+            subscription.setFreeTrial(true);
+            subscription.setSubscribed(false);
+            subscription.setStudent(student);
+            student.setSubscription(subscription);
+            LocalDateTime date = LocalDateTime.now();
+            subscription.setStartDate(date);
+            subscription.setEndDate(date.plusDays(3));
+            this.subscriptionRepository.save(subscription);
+            this.studentRepository.save(student);
+        }else  {
+            return new ApiResponse("You have already taken free trails",false);
+        }
+        return new ApiResponse("Free Subscription added to "+studentId,true);
+    }
+
+
+    public ApiResponse addPremiumSubscription(Integer studentId, Integer subscriptionPlanId) {
 
         SubscriptionPlan subscriptionPlan = this.subscriptionPlanRepository.findById(subscriptionPlanId).orElseThrow(()-> new ResourceNotFoundException("subscriptionPlan","subscriptionPlanId",subscriptionPlanId));
         Student student = this.studentRepository.findById(studentId).orElseThrow(()-> new ResourceNotFoundException("user","userId",studentId));
@@ -33,37 +55,25 @@ public class SubscriptionService {
             if(oldSubscription == null) {
                 Subscription subscription = new Subscription();
                 subscription.setFreeTrial(true);
-                if(subscriptionPlanId == 1) {
-                    subscription.setSubscribed(false);
-                }else {
-                    subscription.setSubscribed(true);
-                }
+                subscription.setSubscribed(true);
                 subscription.setStudent(student);
                 student.setSubscription(subscription);
-                subscription.setStartDate(new Date());
-                Date date = new Date();
-                date.setDate(date.getDate() + subscriptionPlan.getValidDay());
-                subscription.setEndDate(date);
+                LocalDateTime date = LocalDateTime.now();
+                subscription.setStartDate(date);
+                subscription.setEndDate(date.plusDays(subscriptionPlan.getValidDay()));
                 subscription.setSubscriptionPlan(subscriptionPlan);
                 this.subscriptionRepository.save(subscription);
                 this.studentRepository.save(student);
-                oldSubscription = subscription;
-            }
-            else if (oldSubscription.isFreeTrial() && !oldSubscription.isSubscribed() && subscriptionPlanId.equals(1)) {
-
-                return new ApiResponse("You have already taken free trails. ", false);
             }
             else {
-                Date date = new Date();
+                LocalDateTime date = LocalDateTime.now();
                 if(!checkValidDate(oldSubscription.getEndDate())) {
-                    date.setDate(date.getDate() + subscriptionPlan.getValidDay());
+                    oldSubscription.setEndDate(date.plusDays(subscriptionPlan.getValidDay()));
                 }else {
-                    long differenceInMilliseconds = oldSubscription.getEndDate().getTime() - oldSubscription.getStartDate().getTime();
-                    int daysDifference = Math.toIntExact(Long.valueOf(Math.abs(differenceInMilliseconds / (24 * 60 * 60 * 1000))));
-                    date.setDate(date.getDate() + daysDifference + subscriptionPlan.getValidDay());
+                    int remainingDay = compareDates(date,oldSubscription.getEndDate());
+                    oldSubscription.setEndDate(date.plusDays(subscriptionPlan.getValidDay() + remainingDay));
                 }
-                oldSubscription.setStartDate(new Date());
-                oldSubscription.setEndDate(date);
+                oldSubscription.setStartDate(LocalDateTime.now());
                 oldSubscription.setSubscriptionPlan(subscriptionPlan);
                 this.subscriptionRepository.save(oldSubscription);
             }
@@ -74,17 +84,18 @@ public class SubscriptionService {
         }
     }
 
-//    public ApiResponse extendSubscription() {
-//
-//    }
+    public int compareDates(LocalDateTime dateTime1, LocalDateTime dateTime2) {
+        int difference = dateTime1.compareTo(dateTime2);
+        return difference;
+    }
 
 
     public Boolean payment() {
         return true;
     }
 
-    public boolean checkValidDate(Date endDate) {
-        Date currentDate = new Date();
+    public boolean checkValidDate(LocalDateTime endDate) {
+        LocalDateTime currentDate = LocalDateTime.now();
         int datesCompares = currentDate.compareTo(endDate);
         if(datesCompares >= 0) {
             return true;

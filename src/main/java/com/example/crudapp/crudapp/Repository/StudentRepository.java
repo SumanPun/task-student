@@ -16,4 +16,8 @@ public interface StudentRepository extends JpaRepository<Student, Integer>{
 	
 	@Query("FROM Student st")
 	List<Student> getAllDtudentData();
+
+	//@Query(value = "select s.Id, s.email, s.name, r.name from Student s inner join users_role ur on s.Id = ur.user_id inner join Role r on ur.role_id = r.id")
+	//@Query(value = "select s.Id, s.email, s.name, r.name from Student s inner join users_role ur on s.Id = ur.user_id inner join Role r on ur.role_id = r.id")
+	//List<Object[]> getStudentWithRoles();
 }

@@ -20,6 +20,13 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
 	}
 
+//	@ExceptionHandler(RefreshTokenException.class)
+//	public ResponseEntity<ApiResponse> refreshTokenException(RefreshTokenException exception) {
+//		String mesage = exception.getMessage();
+//		ApiResponse apiResponse = new ApiResponse(mesage,false);
+//		return new ResponseEntity<>(apiResponse,HttpStatus.OK);
+//	}
+
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<?> globleExceptionHandler(Exception ex, WebRequest request) {
 		ErrorResponse errorDetails = new ErrorResponse(new Date(), HttpStatus.INTERNAL_SERVER_ERROR.toString(), ex.getMessage(), request.getDescription(false));

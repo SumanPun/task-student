@@ -109,6 +109,13 @@ public class StudentService implements StudentServiceInterface<StudentDto> {
 		return  studentDtos;
 	}
 
+//	public List<Object[]> findAllWithRoles() {
+//
+//		List<Object[]> list = this.studentRepository.getStudentWithRoles();
+//		return list;
+//	}
+
+
 	public StudentDto studentToDto(Student student) {
 		StudentDto studentDto = new StudentDto();
 		studentDto.setId(student.getId());

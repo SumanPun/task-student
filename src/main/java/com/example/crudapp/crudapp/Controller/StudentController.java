@@ -64,6 +64,13 @@ public class StudentController {
 		return new ResponseEntity<>(deletedStudent, HttpStatus.OK);
 		
 	}
+
+//	@RequestMapping("/withRoles")
+//	public ResponseEntity<List<Object[]>> getStudentsWithRoles() {
+//		List<Object[]> objects = this.studentService.findAllWithRoles();
+//		return new ResponseEntity<>(objects,HttpStatus.OK);
+//	}
+
 	
 	
 	

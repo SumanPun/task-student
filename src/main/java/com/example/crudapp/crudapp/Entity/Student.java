@@ -36,7 +36,7 @@ public class Student implements UserDetails{
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 //	@CsvBindByName
-	private int Id;
+	private int id;
 	private String name;
 	private String email;
 	private String password;

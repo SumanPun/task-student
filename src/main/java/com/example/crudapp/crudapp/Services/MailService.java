@@ -6,7 +6,6 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -45,6 +44,27 @@ public class MailService {
             mailSender.send(message);
             response = "Email has been sent to : " + request.getTo();
         } catch (MessagingException | IOException | TemplateException e) {
+            response = "Email send failure to :" + request.getTo();
+        }
+        return response;
+    }
+
+    public String sendBirthdayMail(EmailRequestDto request, Map<String, String> model){
+        String response;
+        MimeMessage message = this.mailSender.createMimeMessage();
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
+                    StandardCharsets.UTF_8.name());
+            Template template = configuration.getTemplate("BirthdayEmail.ftl");
+            String html = FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
+            helper.setTo(request.getTo());
+            helper.setFrom(request.getFrom());
+            helper.setSubject(request.getSubject());
+            helper.setText(html, true);
+            this.mailSender.send(message);
+            response = "Email has been sent to : " + request.getTo();
+        } catch (MessagingException | IOException | TemplateException e) {
+            System.out.println("exception occured");
             response = "Email send failure to :" + request.getTo();
         }
         return response;

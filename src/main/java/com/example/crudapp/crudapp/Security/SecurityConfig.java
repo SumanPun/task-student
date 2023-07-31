@@ -11,8 +11,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-@EnableGlobalMethodSecurity(
-		  prePostEnabled = true)
+//@EnableGlobalMethodSecurity(
+//		  prePostEnabled = true)
 public class SecurityConfig {
 
 
@@ -33,7 +33,7 @@ public class SecurityConfig {
         .authorizeHttpRequests(
         			auth-> 
         			auth.requestMatchers(WHITELIST_PATTERNS).permitAll()
-        			.anyRequest().authenticated()//permitAll()  //authenticated()
+        			.anyRequest().permitAll()  //authenticated()
         		)        
         .exceptionHandling(ex -> ex.authenticationEntryPoint(point))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
